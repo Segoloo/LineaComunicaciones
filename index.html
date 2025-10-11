@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Línea Comunicaciones S.A.S — Panel de Automatización</title>
+  <link rel="icon" href="assets/logo.png" />
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: radial-gradient(circle at top left, #0a0a0a 0%, #050505 100%);
+      color: #eaeaea;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* --- LOADER --- */
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #050505;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      flex-direction: column;
+      animation: fadeOut 1s ease 2.8s forwards;
+    }
+
+    #loader img {
+      height: 120px;
+      width: auto;
+      animation: pulse 2.5s infinite ease-in-out;
+      filter: drop-shadow(0 0 20px #00bcd4);
+    }
+
+    #loader h2 {
+      color: #00bcd4;
+      margin-top: 1rem;
+      font-weight: 500;
+      font-size: 1.1rem;
+      opacity: 0.8;
+      letter-spacing: 1px;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px #00bcd4);
+      }
+      50% {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 25px #00bcd4);
+      }
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+
+    /* --- SIDEBAR --- */
+    .sidebar {
+      width: 270px;
+      background: linear-gradient(180deg, #0f0f0f 0%, #050505 100%);
+      box-shadow: 4px 0 15px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.5rem 1rem;
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      gap: 0.6rem;
+    }
+
+    .sidebar-header img {
+      height: 90px;
+      width: auto;
+      filter: drop-shadow(0 0 10px #00bcd4);
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header img:hover {
+      transform: scale(1.05);
+    }
+
+    .sidebar-header h2 {
+      color: #00bcd4;
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-top: 0.3rem;
+    }
+
+    .sidebar-header span {
+      font-size: 0.85rem;
+      color: #9ca3af;
+    }
+
+    .nav {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .nav button {
+      background: transparent;
+      color: #d1d5db;
+      border: none;
+      padding: 0.8rem 1rem;
+      border-radius: 10px;
+      text-align: left;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      transition: all 0.25s ease;
+    }
+
+    .nav button:hover {
+      background: #00bcd4;
+      color: #000;
+      transform: translateX(4px);
+    }
+
+    .nav button.active {
+      background: linear-gradient(90deg, #00bcd4 0%, #008c9e 100%);
+      color: #000;
+      box-shadow: 0 0 12px rgba(0, 188, 212, 0.4);
+    }
+
+    .sidebar-footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #9ca3af;
+      padding-top: 1rem;
+      border-top: 1px solid #1e1e1e;
+    }
+
+    .sidebar-footer a {
+      color: #00bcd4;
+      text-decoration: none;
+    }
+
+    /* --- MAIN CONTENT --- */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem 2rem;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .module-section {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: auto;
+      visibility: hidden;
+    }
+
+    .module-section.active {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+      position: relative;
+    }
+
+    .section-title {
+      color: #00bcd4;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .section-subtitle {
+      color: #a1a1aa;
+      font-size: 0.95rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .card {
+      background: rgba(20, 20, 20, 0.8);
+      border: 1px solid rgba(0, 188, 212, 0.15);
+      border-radius: 14px;
+      padding: 1rem;
+      box-shadow: 0 0 25px rgba(0, 188, 212, 0.1);
+      transition: transform 0.3s ease;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    iframe {
+      width: 100%;
+      height: 78vh;
+      border: none;
+      border-radius: 12px;
+    }
+
+    footer {
+      margin-top: 1.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #777;
+      border-top: 1px solid #1f2937;
+      padding-top: 0.8rem;
+    }
+
+    footer strong {
+      color: #00bcd4;
+    }
+
+    /* --- COMING SOON ANIMATION --- */
+    .coming-soon {
+      position: relative;
+      text-align: center;
+      padding: 4rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      animation: fadeInUp 0.8s ease;
+    }
+
+    .coming-icon {
+      font-size: 3rem;
+      color: #00bcd4;
+      animation: pulseGlow 2.5s infinite ease-in-out;
+      text-shadow: 0 0 20px rgba(0, 188, 212, 0.6);
+    }
+
+    .coming-text {
+      color: #00bcd4;
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .coming-desc {
+      color: #9ca3af;
+      font-size: 1rem;
+      max-width: 600px;
+      line-height: 1.5;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% {
+        transform: scale(1);
+        text-shadow: 0 0 20px rgba(0, 188, 212, 0.5);
+      }
+      50% {
+        transform: scale(1.1);
+        text-shadow: 0 0 35px rgba(0, 188, 212, 0.8);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Loader -->
+  <div id="loader">
+    <img src="assets/logo.png" alt="Logo Línea Comunicaciones" />
+    <h2>Cargando panel de automatización...</h2>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-header">
+        <img src="assets/logo.png" alt="Línea Comunicaciones Logo" />
+        <h2>Automatización Unificada</h2>
+        <span>Panel Corporativo</span>
+      </div>
+
+      <nav class="nav">
+        <button class="active" onclick="switchModule('mod1', this)">📋 Módulo 1 — TEM Automation</button>
+        <button onclick="switchModule('mod2', this)">⚙️ Módulo 2 — Asignación Automática</button>
+        <button onclick="switchModule('mod3', this)">🔗 Módulo 3 — Integración Sytex</button>
+      </nav>
+    </div>
+
+    <div class="sidebar-footer">
+      <strong>Línea Comunicaciones S.A.S</strong><br />
+      Desarrollado por <strong>Sebastián Gómez López</strong><br />
+      <a href="https://segoloo.github.io/web/" target="_blank">Portafolio Profesional</a><br />
+      © 2025 — Todos los derechos reservados
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <!-- MODULO 1 -->
+    <section id="mod1" class="module-section active">
+      <h2 class="section-title">Módulo 1 — TEM Automation</h2>
+      <p class="section-subtitle">
+        Automatización masiva para crear, editar o eliminar terminales con trazabilidad completa.<br />
+        <strong>Estado:</strong> Desarrollo Completado ✅
+      </p>
+
+      <div class="card">
+        <h3 style="color:#00bcd4; margin-bottom:0.6rem;">Panel de Logs y Estadísticas</h3>
+        <iframe
+          src="https://lookerstudio.google.com/embed/reporting/b2ae0f03-36bc-429c-8596-7e64c934872d/page/IYKbF"
+          allowfullscreen
+          sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+          onload="hideLoader()"></iframe>
+      </div>
+
+      <footer>
+        Proyecto <strong>Automatización Unificada</strong> — <strong>Línea Comunicaciones S.A.S</strong>
+      </footer>
+    </section>
+
+    <!-- MODULO 2 -->
+    <section id="mod2" class="module-section">
+      <h2 class="section-title">Módulo 2 — Asignación Automática</h2>
+      <p class="section-subtitle">Sistema de asignación inteligente de seriales a puntos próximos a fecha de ruta.</p>
+
+      <div class="card">
+        <div class="coming-soon">
+          <div class="coming-icon">⚙️</div>
+          <div class="coming-text">En desarrollo</div>
+          <p class="coming-desc">
+            En Desarrollo
+          </p>
+        </div>
+      </div>
+
+      <footer>
+        Proyecto <strong>Automatización Unificada</strong> — <strong>Línea Comunicaciones S.A.S</strong>
+      </footer>
+    </section>
+
+    <!-- MODULO 3 -->
+    <section id="mod3" class="module-section">
+      <h2 class="section-title">Módulo 3 — Integración Sytex</h2>
+      <p class="section-subtitle">En Desarrollo</p>
+
+      <div class="card">
+        <div class="coming-soon">
+          <div class="coming-icon">🔗</div>
+          <div class="coming-text">Próximamente</div>
+          <p class="coming-desc">
+            En Desarrollo
+          </p>
+        </div>
+      </div>
+
+      <footer>
+        Proyecto <strong>Automatización Unificada</strong> — <strong>Línea Comunicaciones S.A.S</strong>
+      </footer>
+    </section>
+  </main>
+
+  <script>
+    // Loader oculto tras cargar el iframe
+    function hideLoader() {
+      const loader = document.getElementById("loader");
+      loader.style.animation = "fadeOut 1s ease forwards";
+      setTimeout(() => loader.remove(), 1000);
+    }
+
+    // Cambiar de módulo con animación fluida
+    function switchModule(id, btn) {
+      document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      document.querySelectorAll(".module-section").forEach(s => s.classList.remove("active"));
+      const active = document.getElementById(id);
+      setTimeout(() => active.classList.add("active"), 50);
+    }
+  </script>
+</body>
+</html>
