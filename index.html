@@ -5,112 +5,109 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Línea Comunicaciones S.A.S — Panel de Automatización</title>
   <link rel="icon" href="assets/logo.png" />
-  <link rel="stylesheet" href="assets/styles.css" />
   <style>
-    body {
+    /* ==== BASE ==== */
+    :root {
+      --bg-dark: #050505;
+      --bg-sidebar: #0f0f0f;
+      --accent: #00bcd4;
+      --accent-hover: #06d6fa;
+      --text-light: #eaeaea;
+      --text-muted: #9ca3af;
+      --radius: 14px;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
+      padding: 0;
+    }
+
+    body {
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background: radial-gradient(circle at top left, #0a0a0a 0%, #050505 100%);
-      color: #eaeaea;
+      background: radial-gradient(circle at top left, #0a0a0a, #000);
+      color: var(--text-light);
       display: flex;
       height: 100vh;
       overflow: hidden;
     }
 
-    /* --- LOADER --- */
+    /* ==== LOADER ==== */
     #loader {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       background: #050505;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       z-index: 9999;
-      flex-direction: column;
       animation: fadeOut 1s ease 2.8s forwards;
     }
 
     #loader img {
-      height: 120px;
-      width: auto;
+      height: 110px;
+      filter: drop-shadow(0 0 25px var(--accent));
       animation: pulse 2.5s infinite ease-in-out;
-      filter: drop-shadow(0 0 20px #00bcd4);
     }
 
     #loader h2 {
-      color: #00bcd4;
+      color: var(--accent);
       margin-top: 1rem;
       font-weight: 500;
       font-size: 1.1rem;
-      opacity: 0.8;
+      opacity: 0.85;
       letter-spacing: 1px;
     }
 
     @keyframes pulse {
-      0%, 100% {
-        transform: scale(1);
-        filter: drop-shadow(0 0 10px #00bcd4);
-      }
-      50% {
-        transform: scale(1.1);
-        filter: drop-shadow(0 0 25px #00bcd4);
-      }
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px var(--accent)); }
+      50% { transform: scale(1.08); filter: drop-shadow(0 0 35px var(--accent-hover)); }
     }
 
     @keyframes fadeOut {
-      to {
-        opacity: 0;
-        visibility: hidden;
-      }
+      to { opacity: 0; visibility: hidden; }
     }
 
-    /* --- SIDEBAR --- */
+    /* ==== SIDEBAR ==== */
     .sidebar {
       width: 270px;
-      background: linear-gradient(180deg, #0f0f0f 0%, #050505 100%);
-      box-shadow: 4px 0 15px rgba(0, 0, 0, 0.5);
+      background: linear-gradient(180deg, var(--bg-sidebar), #080808);
+      box-shadow: 6px 0 18px rgba(0, 0, 0, 0.6);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 1.5rem 1rem;
+      padding: 1.8rem 1.2rem;
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .sidebar-header {
-      display: flex;
-      align-items: center;
-      flex-direction: column;
       text-align: center;
-      gap: 0.6rem;
     }
 
     .sidebar-header img {
       height: 90px;
-      width: auto;
-      filter: drop-shadow(0 0 10px #00bcd4);
       transition: transform 0.3s ease;
+      filter: drop-shadow(0 0 12px var(--accent));
     }
 
-    .sidebar-header img:hover {
-      transform: scale(1.05);
-    }
+    .sidebar-header img:hover { transform: scale(1.05); }
 
     .sidebar-header h2 {
-      color: #00bcd4;
-      font-weight: 600;
-      font-size: 1.2rem;
-      margin-top: 0.3rem;
+      color: var(--accent);
+      font-size: 1.25rem;
+      margin-top: 0.4rem;
     }
 
     .sidebar-header span {
-      font-size: 0.85rem;
-      color: #9ca3af;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
     }
 
     .nav {
-      margin-top: 1.5rem;
+      margin-top: 1.8rem;
       display: flex;
       flex-direction: column;
       gap: 0.8rem;
@@ -118,50 +115,55 @@
 
     .nav button {
       background: transparent;
-      color: #d1d5db;
-      border: none;
-      padding: 0.8rem 1rem;
-      border-radius: 10px;
-      text-align: left;
+      color: var(--text-light);
+      border: 1px solid transparent;
+      padding: 0.9rem 1rem;
+      border-radius: var(--radius);
       font-size: 0.95rem;
+      text-align: left;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 0.8rem;
-      transition: all 0.25s ease;
+      transition: var(--transition);
     }
 
     .nav button:hover {
-      background: #00bcd4;
-      color: #000;
-      transform: translateX(4px);
+      background: rgba(0, 188, 212, 0.15);
+      border-color: rgba(0, 188, 212, 0.3);
+      transform: translateX(5px);
     }
 
     .nav button.active {
-      background: linear-gradient(90deg, #00bcd4 0%, #008c9e 100%);
+      background: linear-gradient(90deg, var(--accent), var(--accent-hover));
       color: #000;
-      box-shadow: 0 0 12px rgba(0, 188, 212, 0.4);
+      font-weight: 600;
+      box-shadow: 0 0 18px rgba(0, 188, 212, 0.4);
     }
 
     .sidebar-footer {
       text-align: center;
+      color: var(--text-muted);
       font-size: 0.8rem;
-      color: #9ca3af;
       padding-top: 1rem;
-      border-top: 1px solid #1e1e1e;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      line-height: 1.5;
     }
 
     .sidebar-footer a {
-      color: #00bcd4;
+      color: var(--accent);
       text-decoration: none;
+      transition: var(--transition);
     }
 
-    /* --- MAIN CONTENT --- */
+    .sidebar-footer a:hover { color: var(--accent-hover); }
+
+    /* ==== MAIN CONTENT ==== */
     .main {
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding: 1.5rem 2rem;
+      padding: 2rem 2.5rem;
       overflow-y: auto;
       position: relative;
     }
@@ -169,12 +171,9 @@
     .module-section {
       opacity: 0;
       transform: translateY(10px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      transition: opacity 0.5s ease, transform 0.5s ease;
       position: absolute;
-      top: 0;
-      left: 0;
       width: 100%;
-      height: auto;
       visibility: hidden;
     }
 
@@ -186,35 +185,39 @@
     }
 
     .section-title {
-      color: #00bcd4;
-      font-size: 1.4rem;
+      color: var(--accent);
+      font-size: 1.6rem;
       font-weight: 600;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.3rem;
     }
 
     .section-subtitle {
-      color: #a1a1aa;
+      color: var(--text-muted);
+      margin-bottom: 1.4rem;
       font-size: 0.95rem;
-      margin-bottom: 1.2rem;
+      line-height: 1.6;
     }
 
     .card {
-      background: rgba(20, 20, 20, 0.8);
-      border: 1px solid rgba(0, 188, 212, 0.15);
-      border-radius: 14px;
-      padding: 1rem;
-      box-shadow: 0 0 25px rgba(0, 188, 212, 0.1);
-      transition: transform 0.3s ease;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
+      background: rgba(20, 20, 20, 0.85);
+      border: 1px solid rgba(0, 188, 212, 0.2);
+      border-radius: var(--radius);
+      padding: 1.2rem;
+      box-shadow: 0 0 30px rgba(0, 188, 212, 0.1);
+      backdrop-filter: blur(4px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 0 35px rgba(0, 188, 212, 0.2);
     }
 
     iframe {
       width: 100%;
       height: 78vh;
       border: none;
-      border-radius: 12px;
+      border-radius: var(--radius);
     }
 
     footer {
@@ -222,17 +225,14 @@
       text-align: center;
       font-size: 0.85rem;
       color: #777;
-      border-top: 1px solid #1f2937;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
       padding-top: 0.8rem;
     }
 
-    footer strong {
-      color: #00bcd4;
-    }
+    footer strong { color: var(--accent); }
 
-    /* --- COMING SOON ANIMATION --- */
+    /* ==== COMING SOON ==== */
     .coming-soon {
-      position: relative;
       text-align: center;
       padding: 4rem 2rem;
       display: flex;
@@ -245,61 +245,59 @@
 
     .coming-icon {
       font-size: 3rem;
-      color: #00bcd4;
+      color: var(--accent);
       animation: pulseGlow 2.5s infinite ease-in-out;
-      text-shadow: 0 0 20px rgba(0, 188, 212, 0.6);
+      text-shadow: 0 0 25px rgba(0, 188, 212, 0.6);
     }
 
     .coming-text {
-      color: #00bcd4;
+      color: var(--accent);
       font-size: 1.5rem;
       font-weight: 600;
-      letter-spacing: 1px;
     }
 
     .coming-desc {
-      color: #9ca3af;
-      font-size: 1rem;
+      color: var(--text-muted);
       max-width: 600px;
+      font-size: 1rem;
       line-height: 1.5;
     }
 
     @keyframes pulseGlow {
-      0%, 100% {
-        transform: scale(1);
-        text-shadow: 0 0 20px rgba(0, 188, 212, 0.5);
-      }
-      50% {
-        transform: scale(1.1);
-        text-shadow: 0 0 35px rgba(0, 188, 212, 0.8);
-      }
+      0%, 100% { transform: scale(1); text-shadow: 0 0 20px rgba(0, 188, 212, 0.5); }
+      50% { transform: scale(1.1); text-shadow: 0 0 35px rgba(0, 188, 212, 0.9); }
     }
 
     @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(15px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 188, 212, 0.3);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 188, 212, 0.5);
     }
   </style>
 </head>
 
 <body>
-  <!-- Loader -->
+  <!-- LOADER -->
   <div id="loader">
     <img src="assets/logo.png" alt="Logo Línea Comunicaciones" />
     <h2>Cargando panel de automatización...</h2>
   </div>
 
-  <!-- Sidebar -->
+  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div>
       <div class="sidebar-header">
-        <img src="assets/logo.png" alt="Línea Comunicaciones Logo" />
+        <img src="assets/logo.png" alt="Logo" />
         <h2>Automatización Unificada</h2>
         <span>Panel Corporativo</span>
       </div>
@@ -319,9 +317,9 @@
     </div>
   </aside>
 
-  <!-- Main -->
+  <!-- MAIN -->
   <main class="main">
-    <!-- MODULO 1 -->
+    <!-- MÓDULO 1 -->
     <section id="mod1" class="module-section active">
       <h2 class="section-title">Módulo 1 — TEM Automation</h2>
       <p class="section-subtitle">
@@ -330,11 +328,11 @@
       </p>
 
       <div class="card">
-        <h3 style="color:#00bcd4; margin-bottom:0.6rem;">Panel de Logs y Estadísticas</h3>
+        <h3 style="color:var(--accent); margin-bottom:0.6rem;">Panel de Logs y Estadísticas</h3>
         <iframe
           src="https://lookerstudio.google.com/embed/reporting/b2ae0f03-36bc-429c-8596-7e64c934872d/page/IYKbF"
           allowfullscreen
-          sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+          sandbox="allow-scripts allow-same-origin allow-popups allow-storage-access-by-user-activation"
           onload="hideLoader()"></iframe>
       </div>
 
@@ -343,19 +341,20 @@
       </footer>
     </section>
 
-    <!-- MODULO 2 -->
+    <!-- MÓDULO 2 -->
     <section id="mod2" class="module-section">
       <h2 class="section-title">Módulo 2 — Asignación Automática</h2>
-      <p class="section-subtitle">Sistema de asignación inteligente de seriales a puntos próximos a fecha de ruta.
-        <br><strong>Estado:</strong> En Desarrollo 💻
+      <p class="section-subtitle">
+        Sistema de asignación inteligente de seriales a puntos próximos a fecha de ruta.<br />
+        <strong>Estado:</strong> En Desarrollo 💻
       </p>
 
       <div class="card">
-        <h3 style="color:#00bcd4; margin-bottom:0.6rem;">Panel de Logs y Estadísticas</h3>
+        <h3 style="color:var(--accent); margin-bottom:0.6rem;">Panel de Logs y Estadísticas</h3>
         <iframe
           src="https://lookerstudio.google.com/embed/reporting/43afad14-87f8-4a33-8ec5-07b52b58759c/page/F4gbF"
           allowfullscreen
-          sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+          sandbox="allow-scripts allow-same-origin allow-popups allow-storage-access-by-user-activation"
           onload="hideLoader()"></iframe>
       </div>
 
@@ -364,17 +363,17 @@
       </footer>
     </section>
 
-    <!-- MODULO 3 -->
+    <!-- MÓDULO 3 -->
     <section id="mod3" class="module-section">
       <h2 class="section-title">Módulo 3 — Integración Sytex</h2>
-      <p class="section-subtitle">En Desarrollo</p>
+      <p class="section-subtitle"><strong>Estado:</strong> En Desarrollo 🔄</p>
 
       <div class="card">
         <div class="coming-soon">
           <div class="coming-icon">🔗</div>
           <div class="coming-text">Próximamente</div>
           <p class="coming-desc">
-            En Desarrollo
+            Este módulo permitirá sincronización directa con la plataforma Sytex, incluyendo importación, validación y subida automática de inventario.
           </p>
         </div>
       </div>
@@ -386,14 +385,12 @@
   </main>
 
   <script>
-    // Loader oculto tras cargar el iframe
     function hideLoader() {
       const loader = document.getElementById("loader");
       loader.style.animation = "fadeOut 1s ease forwards";
       setTimeout(() => loader.remove(), 1000);
     }
 
-    // Cambiar de módulo con animación fluida
     function switchModule(id, btn) {
       document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
