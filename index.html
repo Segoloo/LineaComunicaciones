@@ -5,8 +5,291 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Línea Comunicaciones S.A.S — Panel de Automatización</title>
   <link rel="icon" href="assets/logo.png" />
-  <link rel="stylesheet" href="assets/styles.css"
+  <link rel="stylesheet" href="assets/styles.css" />
   <style>
+    /* ==== VARIABLES ==== */
+    :root {
+      --bg-dark: #090a10;
+      --bg-sidebar: #13141b;
+      --bg-card: rgba(20, 22, 30, 0.85);
+      --accent: #00e0ff;
+      --accent-hover: #00b8d4;
+      --text-light: #f2f4fa;
+      --text-muted: #a0a0b8;
+      --border: rgba(0, 217, 255, 0.15);
+      --radius: 16px;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ==== BASE ==== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(circle at top left, #12121a 0%, #0a0a0f 60%, #000 100%);
+      color: var(--text-light);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ==== LOADER ==== */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      animation: fadeOut 1s ease 2.2s forwards;
+    }
+
+    #loader img {
+      height: 110px;
+      filter: drop-shadow(0 0 30px rgba(0, 224, 255, 0.4));
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    #loader h2 {
+      color: var(--accent);
+      margin-top: 1rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.08); opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    /* ==== SIDEBAR ==== */
+    .sidebar {
+      width: 290px;
+      background: linear-gradient(180deg, var(--bg-sidebar) 0%, #0a0a10 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 2rem 1.5rem;
+      border-right: 1px solid var(--border);
+      box-shadow: 5px 0 40px rgba(0, 0, 0, 0.4);
+      z-index: 5;
+    }
+
+    .sidebar-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .sidebar-header img {
+      height: 90px;
+      filter: drop-shadow(0 0 25px rgba(0, 217, 255, 0.3));
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .sidebar-header h2 {
+      background: linear-gradient(135deg, var(--accent), #00b8d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-top: 0.8rem;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .sidebar-header span {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .nav button {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius);
+      padding: 0.9rem 1.1rem;
+      color: var(--text-light);
+      text-align: left;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav button::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 250%;
+      height: 250%;
+      background: radial-gradient(circle, rgba(0,217,255,0.12) 0%, transparent 70%);
+      border-radius: 50%;
+      transition: transform 0.4s ease;
+    }
+
+    .nav button:hover::before {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .nav button:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateX(4px);
+    }
+
+    .nav button.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+      color: #000;
+      font-weight: 600;
+      border-color: transparent;
+      box-shadow: 0 0 25px rgba(0, 224, 255, 0.25);
+    }
+
+    .github-btn {
+      margin-top: 1.2rem;
+      background: linear-gradient(135deg, #20242b, #12151a);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--text-light);
+      border-radius: var(--radius);
+      padding: 0.9rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .github-btn:hover {
+      background: #0d1117;
+      box-shadow: 0 0 20px rgba(0, 224, 255, 0.3);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .sidebar-footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+      line-height: 1.6;
+    }
+
+    .sidebar-footer strong {
+      color: var(--accent);
+    }
+
+    /* ==== MAIN ==== */
+    .main {
+      flex: 1;
+      padding: 2.5rem 3rem;
+      position: relative;
+      overflow-y: auto;
+    }
+
+    .module-section {
+      opacity: 0;
+      transform: translateY(15px);
+      transition: var(--transition);
+      position: absolute;
+      width: calc(100% - 6rem);
+      visibility: hidden;
+    }
+
+    .module-section.active {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+      position: relative;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), #8a2be2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-subtitle {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(25px);
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent);
+      box-shadow: 0 10px 40px rgba(0, 217, 255, 0.25);
+    }
+
+    iframe {
+      width: 100%;
+      height: 70vh;
+      border: none;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+
+    footer strong {
+      color: var(--accent);
+    }
+
+    @media (max-width: 1024px) {
+      .sidebar {
+        width: 250px;
+        padding: 1.5rem;
+      }
+      .main { padding: 2rem; }
+    }
   </style>
 </head>
 
@@ -31,8 +314,8 @@
         <button onclick="switchModule('mod2', this)">⚙️ Módulo 2 — Asignación Automática</button>
         <button onclick="switchModule('mod3', this)">🔗 Módulo 3 — Integración Sytex</button>
         <button class="github-btn" onclick="window.open('https://github.com/segoloo/terminal-automation','_blank')">
-          <svg height="22" width="22" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.01.08-2.1 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.03 2.2-.82 2.2-.82.44 1.09.16 1.9.08 2.1.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+          <svg height="20" width="20" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 ..."></path>
           </svg>
           <span>Repositorio - Descarga</span>
         </button>
@@ -49,86 +332,47 @@
 
   <!-- MAIN -->
   <main class="main">
-    <!-- MÓDULO 1 -->
     <section id="mod1" class="module-section active">
       <h2 class="section-title">Módulo 1 — TEM Automation</h2>
-      <p class="section-subtitle">
-        Automatización masiva para crear, editar o eliminar terminales con trazabilidad completa.<br />
-        <strong>Estado:</strong> Desarrollo Completado ✅
-      </p>
-
+      <p class="section-subtitle">Automatización masiva para crear, editar o eliminar terminales con trazabilidad completa. <strong>Estado:</strong> Completado ✅</p>
       <div class="card">
         <h3>📊 Panel de Logs y Estadísticas</h3>
-        <iframe
-          src="https://lookerstudio.google.com/embed/reporting/b2ae0f03-36bc-429c-8596-7e64c934872d/page/IYKbF"
-          allowfullscreen
-          sandbox="allow-scripts allow-same-origin allow-popups allow-storage-access-by-user-activation"
-          onload="hideLoader()"></iframe>
+        <iframe src="https://lookerstudio.google.com/embed/reporting/b2ae0f03-36bc-429c-8596-7e64c934872d/page/IYKbF" allowfullscreen></iframe>
       </div>
-
-      <footer>
-        Proyecto <strong>Automatización Unificada</strong> — <strong>Línea Comunicaciones S.A.S</strong>
-      </footer>
+      <footer>Proyecto <strong>Automatización Unificada</strong> — <strong>Línea Comunicaciones S.A.S</strong></footer>
     </section>
 
-    <!-- MÓDULO 2 -->
     <section id="mod2" class="module-section">
       <h2 class="section-title">Módulo 2 — Asignación Automática</h2>
-      <p class="section-subtitle">
-        Sistema de asignación inteligente de seriales a puntos próximos a fecha de ruta directamente desde los sharepoints en la nube.<br />
-        <strong>Estado:</strong> En Desarrollo 💻
-      </p>
-
+      <p class="section-subtitle">Sistema de asignación inteligente de seriales desde los SharePoints en la nube.<br><strong>Estado:</strong> En desarrollo 💻</p>
       <div class="card">
         <h3>📊 Panel de Logs y Estadísticas</h3>
-        <iframe
-          src="https://lookerstudio.google.com/embed/reporting/43afad14-87f8-4a33-8ec5-07b52b58759c/page/F4gbF"
-          allowfullscreen
-          sandbox="allow-scripts allow-same-origin allow-popups allow-storage-access-by-user-activation"
-          onload="hideLoader()"></iframe>
+        <iframe src="https://lookerstudio.google.com/embed/reporting/43afad14-87f8-4a33-8ec5-07b52b58759c/page/F4gbF" allowfullscreen></iframe>
       </div>
-
-      <footer>
-        Proyecto <strong>Automatización Unificada</strong> — <strong>Línea Comunicaciones S.A.S</strong>
-      </footer>
+      <footer>Proyecto <strong>Automatización Unificada</strong> — <strong>Línea Comunicaciones S.A.S</strong></footer>
     </section>
 
-    <!-- MÓDULO 3 -->
     <section id="mod3" class="module-section">
       <h2 class="section-title">Módulo 3 — Integración Sytex</h2>
-      <p class="section-subtitle"><strong>Estado:</strong> En Desarrollo 🔄</p>
-
-      <div class="card">
-        <div class="coming-soon">
-          <div class="coming-icon">🔗</div>
-          <div class="coming-text">Próximamente</div>
-          <p class="coming-desc">
-            Este módulo permitirá la generación de archivos de importación para actualización masiva en Sytex.
-          </p>
-        </div>
+      <p class="section-subtitle"><strong>Estado:</strong> Próximamente 🔄</p>
+      <div class="card" style="text-align:center;padding:5rem;">
+        <div style="font-size:3rem;color:var(--accent);margin-bottom:1rem;">🔗</div>
+        <h3 style="color:var(--accent)">Módulo en desarrollo</h3>
+        <p style="color:var(--text-muted)">Este módulo permitirá la generación de archivos para actualización masiva en Sytex.</p>
       </div>
-
-      <footer>
-        Proyecto <strong>Automatización Unificada</strong> — <strong>Línea Comunicaciones S.A.S</strong>
-      </footer>
+      <footer>Proyecto <strong>Automatización Unificada</strong> — <strong>Línea Comunicaciones S.A.S</strong></footer>
     </section>
   </main>
 
   <script>
-    function hideLoader() {
-      const loader = document.getElementById("loader");
-      loader.style.animation = "fadeOut 1s ease forwards";
-      setTimeout(() => loader.remove(), 1000);
-    }
-
     function switchModule(id, btn) {
       document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
 
       document.querySelectorAll(".module-section").forEach(s => s.classList.remove("active"));
-      const active = document.getElementById(id);
-      setTimeout(() => active.classList.add("active"), 50);
+      setTimeout(() => document.getElementById(id).classList.add("active"), 80);
     }
+    setTimeout(() => document.getElementById("loader").remove(), 2500);
   </script>
 </body>
 </html>
