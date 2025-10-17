@@ -31,7 +31,7 @@
 
     body {
       font-family: "Segoe UI", Roboto, sans-serif;
-      background: radial-gradient(circle at top left, #12121a 0%, #0a0a0f 60%, #000 100%);
+      background: radial-gradient(circle at top left, #141520 0%, #0a0a0f 70%, #000 100%);
       color: var(--text-light);
       display: flex;
       height: 100vh;
@@ -141,23 +141,6 @@
       overflow: hidden;
     }
 
-    .nav button::before {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      width: 250%;
-      height: 250%;
-      background: radial-gradient(circle, rgba(0,217,255,0.12) 0%, transparent 70%);
-      border-radius: 50%;
-      transition: transform 0.4s ease;
-    }
-
-    .nav button:hover::before {
-      transform: translate(-50%, -50%) scale(1);
-    }
-
     .nav button:hover {
       border-color: var(--accent);
       color: var(--accent);
@@ -202,8 +185,14 @@
       line-height: 1.6;
     }
 
-    .sidebar-footer strong {
+    .sidebar-footer a {
       color: var(--accent);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .sidebar-footer a:hover {
+      color: var(--accent-hover);
     }
 
     /* ==== MAIN ==== */
@@ -284,10 +273,7 @@
     }
 
     @media (max-width: 1024px) {
-      .sidebar {
-        width: 250px;
-        padding: 1.5rem;
-      }
+      .sidebar { width: 250px; padding: 1.5rem; }
       .main { padding: 2rem; }
     }
   </style>
@@ -334,7 +320,7 @@
   <main class="main">
     <section id="mod1" class="module-section active">
       <h2 class="section-title">Módulo 1 — TEM Automation</h2>
-      <p class="section-subtitle">Automatización masiva para crear, editar o eliminar terminales con trazabilidad completa. <strong>Estado:</strong> Completado ✅</p>
+      <p class="section-subtitle">Automatización masiva para crear, editar o eliminar terminales con trazabilidad completa.<br> <strong>Estado:</strong> Completado ✅</p>
       <div class="card">
         <h3>📊 Panel de Logs y Estadísticas</h3>
         <iframe src="https://lookerstudio.google.com/embed/reporting/b2ae0f03-36bc-429c-8596-7e64c934872d/page/IYKbF" allowfullscreen></iframe>
@@ -344,7 +330,7 @@
 
     <section id="mod2" class="module-section">
       <h2 class="section-title">Módulo 2 — Asignación Automática</h2>
-      <p class="section-subtitle">Sistema de asignación inteligente de seriales desde los SharePoints en la nube.<br><strong>Estado:</strong> En desarrollo 💻</p>
+      <p class="section-subtitle">Sistema de asignación inteligente de seriales desde los SharePoints en la nube.<br><strong>Estado:</strong> Completado ✅</p>
       <div class="card">
         <h3>📊 Panel de Logs y Estadísticas</h3>
         <iframe src="https://lookerstudio.google.com/embed/reporting/43afad14-87f8-4a33-8ec5-07b52b58759c/page/F4gbF" allowfullscreen></iframe>
@@ -352,13 +338,13 @@
       <footer>Proyecto <strong>Automatización Unificada</strong> — <strong>Línea Comunicaciones S.A.S</strong></footer>
     </section>
 
+    <!-- MÓDULO 3 ACTUALIZADO -->
     <section id="mod3" class="module-section">
       <h2 class="section-title">Módulo 3 — Integración Sytex</h2>
-      <p class="section-subtitle"><strong>Estado:</strong> Próximamente 🔄</p>
-      <div class="card" style="text-align:center;padding:5rem;">
-        <div style="font-size:3rem;color:var(--accent);margin-bottom:1rem;">🔗</div>
-        <h3 style="color:var(--accent)">Módulo en desarrollo</h3>
-        <p style="color:var(--text-muted)">Este módulo permitirá la generación de archivos para actualización masiva en Sytex.</p>
+      <p class="section-subtitle">Integración con el sistema <strong>Sytex</strong> para generación automatizada de archivos y sincronización masiva.<br><strong>Estado:</strong> Completado ✅</p>
+      <div class="card">
+        <h3>📊 Panel de Control e Integración</h3>
+        <iframe width="600" height="450" src="https://lookerstudio.google.com/embed/reporting/9ac4176d-578e-4756-bc96-486478885c9d/page/pD8bF" frameborder="0" style="border:0" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
       </div>
       <footer>Proyecto <strong>Automatización Unificada</strong> — <strong>Línea Comunicaciones S.A.S</strong></footer>
     </section>
